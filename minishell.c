@@ -18,13 +18,14 @@ int	s_quoted_word(char *line, t_list **lst, int i)
 
 	while (line[i] != '\'')
 	{
-		temp_new->content->c = ft_lstnew(line[i], 0);
+		temp_new = ft_lstnew(NULL, line[i]);
+		temp_new->flag = NONE;
 		ft_lstadd_back(&temp, temp_new);
 		i++;
 	}
 	if (temp)
 		*lst = temp;
-	return (i);
+	return (i++);
 }
 
 int	d_quoted_word(char *line, t_scanner *scanner, int i)
@@ -36,33 +37,52 @@ int	d_quoted_word(char *line, t_scanner *scanner, int i)
 	{
 		while (line[i] != '$' && line[i] != '\"')
 		{
-			temp_new->content->c = ft_lstnew(line[i], 0);
-			ft_lstadd_back(&temp, temp_new);
-			i++;
+			if (line[i] == '\'')
+				i++;
+			else
+			{
+				temp_new = ft_lstnew(NULL, line[i]);
+				temp_new->flag = NONE;
+				ft_lstadd_back(&temp, temp_new);
+				i++;
+			}
 		}
 		if (line[i] == '$')
 		{
-			
+			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
+			i++;
+			there_is_env_var(line, i, scanner);
 		}
-		
 	}
 	scanner->temp = temp;
-	return (i);
+	return (i++);
 }
 
 void	whats_the_state(char *line, t_scanner *scanner, int i)
 {
+	t_list	*new;
+
 	if (scanner->state.s_quoted_word)
 		i = s_quoted_word(line, &scanner->temp, ++i);
-	if (scanner->state.d_quoted_word)
+	else if (scanner->state.d_quoted_word)
 		i = d_quoted_word(line, scanner, ++i);
-	if (!scanner->state.reading_word)
+	else if (scanner->state.reading_word == 0)
 	{
 		if (scanner->temp)
-		{
-			wrd_lstadd_back(&scanner->words, scanner->temp);
-			ft_lstclear(&scanner->temp);
-		}
+			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
+		init_states(&scanner->state);
+	}
+	else if (scanner->state.reading_word)
+	{
+		new = ft_lstnew(NULL, line[i]);
+		new->flag = NONE;
+		ft_lstadd_back(&scanner->temp, new);
+	}
+	else if (scanner->words)
+	{
+		printf("-----------------");
+		printf("flag = %d\n", scanner->words->flag);
+		print_lst(scanner->words);
 	}
 }
 
@@ -76,7 +96,7 @@ void	ft_scan_line(char *line, t_scanner *scanner)
 	{
 		while (!scanner->state.end_of_instruct)
 		{
-			while (scanner->state.reading_word)
+			while (line[i] && scanner->state.reading_word)
 			{
 				if (line[i] == '\"')
 					scanner->state.d_quoted_word = 1;
@@ -90,6 +110,8 @@ void	ft_scan_line(char *line, t_scanner *scanner)
 					scanner->state.reading_word = 0;
 				else if (line[i] == 0)
 					scanner->state.end_of_line = 1;
+				else if (line[i] == ';')
+					scanner->state.end_of_instruct = 1;
 				whats_the_state(line, scanner, i);
 				i++;
 			}

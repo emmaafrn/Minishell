@@ -1,24 +1,25 @@
 #include "minishell.h"
 
-t_list	*ft_lstnew(t_lst_content *content, int a)
+t_list	*ft_lstnew(char *str, char c)
 {
-	t_list	*liste;
+	t_list	*list;
 
-	liste = malloc(sizeof(t_list));
-	if (!(liste))
+	list = malloc(sizeof(t_list));
+	if (!(list))
 		return (NULL);
-	if (a == 0)
+	if (str == NULL)
 	{
-		liste->content->c = content->c;
-		liste->content->word = NULL;
+		printf("c = %c\n", c);
+		list->content->c = c;
+		list->content->word = "NULL";
 	}
-	else if (a == 1)
+	else
 	{
-		liste->content->c = '0';
-		liste->content->word = content->word;
+		list->content->c = '0';
+		list->content->word = str;
 	}
-	liste->next = NULL;
-	return (liste);
+	list->next = NULL;
+	return (list);
 }
 
 void	ft_lstadd_back(t_list **alst, t_list *new)

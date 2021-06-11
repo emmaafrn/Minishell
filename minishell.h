@@ -9,6 +9,10 @@
 # include <stdio.h>
 # include <sys/types.h>
 
+#define NONE 0
+#define SPACE 1
+#define DOLLAR 2
+
 typedef struct	s_lst_content
 {
 	char	c;
@@ -42,10 +46,18 @@ typedef struct s_scanner
 	t_list		*words;
 }				t_scanner;
 
-t_list			*ft_lstnew(t_lst_content *content, int a);
+t_list			*ft_lstnew(char *str, char c);
 void			ft_lstadd_back(t_list **alst, t_list *new);
 void			ft_lstclear(t_list **lst);
 int				ft_lstsize(t_list *lst);
+
+char			*from_lst_to_str(t_list *a);
+void			from_lst_a_to_lst_b(t_list **a, t_list **b);
+
+void			there_is_env_var(char *line, int i, t_scanner *scanner);
+
+void			print_lst(t_list *lst);
+
 
 
 #endif

@@ -1,6 +1,6 @@
 NAME	=	minishell
 
-SRCS	=	get_next_line.c list.c minishell.c
+SRCS	=	get_next_line.c list.c minishell.c utils.c dollar.c
 
 OBJ = ${SRCS:.c=.o}
 
@@ -8,7 +8,7 @@ CC  = gcc
 
 RM  = rm -f
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 
 all:		$(NAME)
 
