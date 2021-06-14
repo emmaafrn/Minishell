@@ -7,7 +7,6 @@ void	init_states(t_state *state)
 	state->s_quoted_word = 0;
 	state->escape_char = 0;
 	state->dollar = 0;
-	state->end_of_instruct = 0;
 	state->end_of_line = 0;
 }
 
@@ -35,7 +34,7 @@ int	d_quoted_word(char *line, t_scanner *scanner, int i)
 
 	while (line[i] != '\"')
 	{
-		while (line[i] != '$' && line[i] != '\"')
+		while (line[i] && line[i] != '$' && line[i] != '\"')
 		{
 			if (line[i] == '\'')
 				i++;
@@ -78,7 +77,7 @@ void	whats_the_state(char *line, t_scanner *scanner, int i)
 		new->flag = NONE;
 		ft_lstadd_back(&scanner->temp, new);
 	}
-	else if (scanner->words)
+	if (scanner->words && scanner->words->content)
 	{
 		printf("-----------------");
 		printf("flag = %d\n", scanner->words->flag);
@@ -89,32 +88,36 @@ void	whats_the_state(char *line, t_scanner *scanner, int i)
 void	ft_scan_line(char *line, t_scanner *scanner)
 {
 	int	i;
+	t_list	*new;
 
 	i = 0;
 	init_states(&scanner->state);
 	while (!scanner->state.end_of_line)
 	{
-		while (!scanner->state.end_of_instruct)
+		while (line[i] && scanner->state.reading_word)
 		{
-			while (line[i] && scanner->state.reading_word)
+			if (line[i] == '\"')
+				scanner->state.d_quoted_word = 1;
+			else if (line[i] == '\'')
+				scanner->state.s_quoted_word = 1;
+			else if (line[i] == '$')
+				scanner->state.dollar = 1;
+			else if (line[i] == ' ')
 			{
-				if (line[i] == '\"')
-					scanner->state.d_quoted_word = 1;
-				else if (line[i] == '\'')
-					scanner->state.s_quoted_word = 1;
-				else if (line[i] == '\\')
-					scanner->state.escape_char = 1;
-				else if (line[i] == '$')
-					scanner->state.dollar = 1;
-				else if (line[i] == ' ')
-					scanner->state.reading_word = 0;
-				else if (line[i] == 0)
-					scanner->state.end_of_line = 1;
-				else if (line[i] == ';')
-					scanner->state.end_of_instruct = 1;
-				whats_the_state(line, scanner, i);
-				i++;
+				scanner->state.reading_word = 0;
+				if (scanner->temp)
+					from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 			}
+			else if (line[i] == 0)
+				scanner->state.end_of_line = 1;
+			else
+			{
+				new = ft_lstnew(NULL, line[i]);
+				new->flag = NONE;
+				ft_lstadd_back(&scanner->temp, new);
+			}
+			whats_the_state(line, scanner, i);
+			i++;
 		}
 	}
 }

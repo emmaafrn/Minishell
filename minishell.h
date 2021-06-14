@@ -34,7 +34,6 @@ typedef struct s_state
 	int	d_quoted_word;
 	int	escape_char;
 	int	dollar;
-	int	end_of_instruct;
 	int	end_of_line;
 }				t_state;
 

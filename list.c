@@ -9,12 +9,17 @@ t_list	*ft_lstnew(char *str, char c)
 		return (NULL);
 	if (str == NULL)
 	{
-		printf("c = %c\n", c);
+		list->content = malloc(sizeof(t_lst_content));
+		if (!list->content)
+			return (NULL);
 		list->content->c = c;
-		list->content->word = "NULL";
+		list->content->word = NULL;
 	}
 	else
 	{
+		list->content = malloc(sizeof(t_lst_content));
+		if (!list->content)
+			return (NULL);
 		list->content->c = '0';
 		list->content->word = str;
 	}
@@ -22,19 +27,27 @@ t_list	*ft_lstnew(char *str, char c)
 	return (list);
 }
 
+t_list	*ft_lstlast(t_list *lst)
+{
+	if (lst == NULL)
+		return (lst);
+	while (lst && lst->next != NULL)
+		lst = lst->next;
+	return (lst);
+}
+
 void	ft_lstadd_back(t_list **alst, t_list *new)
 {
-	t_list	*ok;
+	t_list		*tmp;
 
 	if (*alst == NULL)
-	{
 		*alst = new;
-		return ;
+	else
+	{
+		tmp = ft_lstlast(*alst);
+		tmp->next = new;
+		tmp->next->next = NULL;
 	}
-	ok = *alst;
-	while (ok->next != NULL)
-		ok = ok->next;
-	ok->next = new;
 }
 
 void	ft_lstclear(t_list **lst)
