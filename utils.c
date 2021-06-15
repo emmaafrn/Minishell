@@ -15,7 +15,7 @@ char	*from_lst_to_str(t_list *a)
 		return (NULL);
 	while (++i < len)
 	{
-		str[i] = a->content->c;
+		str[i] = a->content.c;
 		a = a->next;
 	}
 	str[i] = '\0';
@@ -28,6 +28,7 @@ void	from_lst_a_to_lst_b(t_list **a, t_list **b)
 	t_list	*new;
 	char	*str;
 
+	printf("AAAAAA\n");
 	str = from_lst_to_str(*a);
 	if (str == NULL)
 		return ;
@@ -35,7 +36,7 @@ void	from_lst_a_to_lst_b(t_list **a, t_list **b)
 	new->flag = (*a)->flag;
 	ft_lstadd_back(b, new);
 	ft_lstclear(a);
-	free(str);
+	// print_lst(*b);
 }
 
 void	print_lst(t_list *lst)
@@ -43,9 +44,9 @@ void	print_lst(t_list *lst)
 	t_list	*newlst;
 
 	newlst = lst;
-	while (newlst && newlst->content->word)
+	while (newlst && newlst->content.word)
 	{
-		printf("%s\n", newlst->content->word);
+		printf("%s\n", newlst->content.word);
 		newlst = newlst->next;
 	}
 }

@@ -9,19 +9,13 @@ t_list	*ft_lstnew(char *str, char c)
 		return (NULL);
 	if (str == NULL)
 	{
-		list->content = malloc(sizeof(t_lst_content));
-		if (!list->content)
-			return (NULL);
-		list->content->c = c;
-		list->content->word = NULL;
+		list->content.c = c;
+		list->content.word = NULL;
 	}
 	else
 	{
-		list->content = malloc(sizeof(t_lst_content));
-		if (!list->content)
-			return (NULL);
-		list->content->c = '0';
-		list->content->word = str;
+		list->content.c = '0';
+		list->content.word = str;
 	}
 	list->next = NULL;
 	return (list);

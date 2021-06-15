@@ -15,7 +15,7 @@ int	s_quoted_word(char *line, t_list **lst, int i)
 	t_list	*temp;
 	t_list	*temp_new;
 
-	while (line[i] != '\'')
+	while (line[i] && line[i] != '\'')
 	{
 		temp_new = ft_lstnew(NULL, line[i]);
 		temp_new->flag = NONE;
@@ -32,19 +32,16 @@ int	d_quoted_word(char *line, t_scanner *scanner, int i)
 	t_list	*temp;
 	t_list	*temp_new;
 
-	while (line[i] != '\"')
+	temp = NULL;
+	while (line[i] && line[i] != '\"')
 	{
+		// printf("line[i] = %c\n", line[i]);
 		while (line[i] && line[i] != '$' && line[i] != '\"')
 		{
-			if (line[i] == '\'')
-				i++;
-			else
-			{
-				temp_new = ft_lstnew(NULL, line[i]);
-				temp_new->flag = NONE;
-				ft_lstadd_back(&temp, temp_new);
-				i++;
-			}
+			temp_new = ft_lstnew(NULL, line[i]);
+			temp_new->flag = NONE;
+			ft_lstadd_back(&temp, temp_new);
+			i++;
 		}
 		if (line[i] == '$')
 		{
@@ -57,7 +54,7 @@ int	d_quoted_word(char *line, t_scanner *scanner, int i)
 	return (i++);
 }
 
-void	whats_the_state(char *line, t_scanner *scanner, int i)
+int	whats_the_state(char *line, t_scanner *scanner, int i)
 {
 	t_list	*new;
 
@@ -70,6 +67,7 @@ void	whats_the_state(char *line, t_scanner *scanner, int i)
 		if (scanner->temp)
 			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 		init_states(&scanner->state);
+		i++;
 	}
 	else if (scanner->state.reading_word)
 	{
@@ -77,12 +75,13 @@ void	whats_the_state(char *line, t_scanner *scanner, int i)
 		new->flag = NONE;
 		ft_lstadd_back(&scanner->temp, new);
 	}
-	if (scanner->words && scanner->words->content)
+	if (scanner->words)
 	{
 		printf("-----------------");
 		printf("flag = %d\n", scanner->words->flag);
 		print_lst(scanner->words);
 	}
+	return (i);
 }
 
 void	ft_scan_line(char *line, t_scanner *scanner)
@@ -116,10 +115,13 @@ void	ft_scan_line(char *line, t_scanner *scanner)
 				new->flag = NONE;
 				ft_lstadd_back(&scanner->temp, new);
 			}
-			whats_the_state(line, scanner, i);
+			i = whats_the_state(line, scanner, i);
 			i++;
 		}
+		if (scanner->temp)
+			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 	}
+	i = whats_the_state(line, scanner, i);
 }
 
 int	main(void)
