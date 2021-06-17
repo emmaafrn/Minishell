@@ -5,52 +5,44 @@ void	init_states(t_state *state)
 	state->reading_word = 1;
 	state->d_quoted_word = 0;
 	state->s_quoted_word = 0;
-	state->escape_char = 0;
 	state->dollar = 0;
-	state->end_of_line = 0;
 }
 
 int	s_quoted_word(char *line, t_list **lst, int i)
 {
-	t_list	*temp;
-	t_list	*temp_new;
+	t_list	*new;
 
 	while (line[i] && line[i] != '\'')
 	{
-		temp_new = ft_lstnew(NULL, line[i]);
-		temp_new->flag = NONE;
-		ft_lstadd_back(&temp, temp_new);
+		new = ft_lstnew(NULL, line[i]);
+		new->flag = NONE;
+		ft_lstadd_back(lst, new);
 		i++;
 	}
-	if (temp)
-		*lst = temp;
 	return (i++);
 }
 
-int	d_quoted_word(char *line, t_scanner *scanner, int i)
+int	d_quoted_word(char *line, t_list **lst, t_list **wrds_lst, int i)
 {
-	t_list	*temp;
-	t_list	*temp_new;
+	t_list	*new;
 
-	temp = NULL;
 	while (line[i] && line[i] != '\"')
 	{
-		// printf("line[i] = %c\n", line[i]);
 		while (line[i] && line[i] != '$' && line[i] != '\"')
 		{
-			temp_new = ft_lstnew(NULL, line[i]);
-			temp_new->flag = NONE;
-			ft_lstadd_back(&temp, temp_new);
+			new = ft_lstnew(NULL, line[i]);
+			new->flag = NONE;
+			ft_lstadd_back(lst, new);
 			i++;
 		}
 		if (line[i] == '$')
 		{
-			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
+			if (lst)
+				from_lst_a_to_lst_b(lst, wrds_lst);
 			i++;
-			there_is_env_var(line, i, scanner);
+			i = there_is_env_var(line, i, lst, wrds_lst);
 		}
 	}
-	scanner->temp = temp;
 	return (i++);
 }
 
@@ -61,67 +53,70 @@ int	whats_the_state(char *line, t_scanner *scanner, int i)
 	if (scanner->state.s_quoted_word)
 		i = s_quoted_word(line, &scanner->temp, ++i);
 	else if (scanner->state.d_quoted_word)
-		i = d_quoted_word(line, scanner, ++i);
+		i = d_quoted_word(line, &scanner->temp, &scanner->words, ++i);
 	else if (scanner->state.reading_word == 0)
 	{
 		if (scanner->temp)
 			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 		init_states(&scanner->state);
-		i++;
+		// i++;
 	}
 	else if (scanner->state.reading_word)
 	{
-		new = ft_lstnew(NULL, line[i]);
-		new->flag = NONE;
-		ft_lstadd_back(&scanner->temp, new);
-	}
-	if (scanner->words)
-	{
-		printf("-----------------");
-		printf("flag = %d\n", scanner->words->flag);
-		print_lst(scanner->words);
+		if (line[i] == '$')
+			i = there_is_env_var(line, ++i, &scanner->temp, &scanner->words);
+		else
+		{
+			new = ft_lstnew(NULL, line[i]);
+			new->flag = NONE;
+			ft_lstadd_back(&scanner->temp, new);
+		}
 	}
 	return (i);
 }
 
 void	ft_scan_line(char *line, t_scanner *scanner)
 {
-	int	i;
+	int		i;
 	t_list	*new;
+	int		incremented;
 
 	i = 0;
-	init_states(&scanner->state);
-	while (!scanner->state.end_of_line)
+	incremented = 0;
+	while (line[i])
 	{
-		while (line[i] && scanner->state.reading_word)
+		init_states(&scanner->state);
+		if (line[i] == '\"')
+			scanner->state.d_quoted_word = 1;
+		else if (line[i] == '\'')
+			scanner->state.s_quoted_word = 1;
+		else if (line[i] == '$')
+			scanner->state.dollar = 1;
+		else if (line[i] == ' ')
 		{
-			if (line[i] == '\"')
-				scanner->state.d_quoted_word = 1;
-			else if (line[i] == '\'')
-				scanner->state.s_quoted_word = 1;
-			else if (line[i] == '$')
-				scanner->state.dollar = 1;
-			else if (line[i] == ' ')
-			{
-				scanner->state.reading_word = 0;
-				if (scanner->temp)
-					from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
-			}
-			else if (line[i] == 0)
-				scanner->state.end_of_line = 1;
-			else
-			{
-				new = ft_lstnew(NULL, line[i]);
-				new->flag = NONE;
-				ft_lstadd_back(&scanner->temp, new);
-			}
-			i = whats_the_state(line, scanner, i);
-			i++;
+			if (scanner->temp)
+				from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
+			new = ft_lstnew(NULL, line[i]);
+			new->flag = SPACE;
+			ft_lstadd_back(&scanner->temp, new);
+			while (line[i] && line[i] == ' ')
+				i++;
+			incremented = 1;
+			scanner->state.reading_word = 0;
+			if (scanner->temp)
+				from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 		}
-		if (scanner->temp)
-			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
+		i = whats_the_state(line, scanner, i);
+		if (line[i] && incremented == 0)
+			i++;
 	}
-	i = whats_the_state(line, scanner, i);
+	if (scanner->temp)
+		from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
+	if (scanner->words)
+	{
+		printf("-----------------\n");
+		print_lst(scanner->words);
+	}
 }
 
 int	main(void)

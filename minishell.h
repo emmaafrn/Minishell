@@ -19,7 +19,6 @@ typedef struct	s_lst_content
 	char	*word;
 }				t_lst_content;
 
-
 typedef struct s_list
 {
 	t_lst_content	content;
@@ -32,9 +31,7 @@ typedef struct s_state
 	int	reading_word;
 	int	s_quoted_word;
 	int	d_quoted_word;
-	int	escape_char;
 	int	dollar;
-	int	end_of_line;
 }				t_state;
 
 typedef struct s_scanner
@@ -53,7 +50,7 @@ int				ft_lstsize(t_list *lst);
 char			*from_lst_to_str(t_list *a);
 void			from_lst_a_to_lst_b(t_list **a, t_list **b);
 
-void			there_is_env_var(char *line, int i, t_scanner *scanner);
+int				there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst);
 
 void			print_lst(t_list *lst);
 

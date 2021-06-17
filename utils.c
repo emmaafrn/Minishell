@@ -28,7 +28,6 @@ void	from_lst_a_to_lst_b(t_list **a, t_list **b)
 	t_list	*new;
 	char	*str;
 
-	printf("AAAAAA\n");
 	str = from_lst_to_str(*a);
 	if (str == NULL)
 		return ;
@@ -36,7 +35,6 @@ void	from_lst_a_to_lst_b(t_list **a, t_list **b)
 	new->flag = (*a)->flag;
 	ft_lstadd_back(b, new);
 	ft_lstclear(a);
-	// print_lst(*b);
 }
 
 void	print_lst(t_list *lst)
@@ -46,7 +44,8 @@ void	print_lst(t_list *lst)
 	newlst = lst;
 	while (newlst && newlst->content.word)
 	{
-		printf("%s\n", newlst->content.word);
+		printf("[%s]\n", newlst->content.word);
+		printf("flag = %i\n", newlst->flag);
 		newlst = newlst->next;
 	}
 }
