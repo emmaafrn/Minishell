@@ -6,6 +6,8 @@ int	there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst)
 	int		start;
 
 	start = i;
+	if (*lst)
+		from_lst_a_to_lst_b(lst, wrds_lst);
 	while (line[i] && ((line[i] >= 97 && line[i] >= 122) || (line[i] >= 65
 		&& line[i] <= 90) || (line[i] >= 48 && line[i] <= 57) || line[i] == '_')
 				&& line[i] != ' ' && line[i] != '\'' && line[i] != '\"')
@@ -17,6 +19,7 @@ int	there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst)
 	}
 	if (i == start)
 	{
+		i--;
 		new = ft_lstnew(NULL, line[i]);
 		new->flag = NONE;
 		ft_lstadd_back(lst, new);

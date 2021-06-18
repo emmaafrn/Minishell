@@ -9,9 +9,10 @@
 # include <stdio.h>
 # include <sys/types.h>
 
-#define NONE 0
-#define SPACE 1
-#define DOLLAR 2
+# define NONE 0
+# define SPACE 1
+# define DOLLAR 2
+# define SPECIAL 3
 
 typedef struct	s_lst_content
 {

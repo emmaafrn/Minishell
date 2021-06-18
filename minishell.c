@@ -37,7 +37,7 @@ int	d_quoted_word(char *line, t_list **lst, t_list **wrds_lst, int i)
 		}
 		if (line[i] == '$')
 		{
-			if (lst)
+			if (*lst)
 				from_lst_a_to_lst_b(lst, wrds_lst);
 			i++;
 			i = there_is_env_var(line, i, lst, wrds_lst);
@@ -59,7 +59,6 @@ int	whats_the_state(char *line, t_scanner *scanner, int i)
 		if (scanner->temp)
 			from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 		init_states(&scanner->state);
-		// i++;
 	}
 	else if (scanner->state.reading_word)
 	{
@@ -79,10 +78,8 @@ void	ft_scan_line(char *line, t_scanner *scanner)
 {
 	int		i;
 	t_list	*new;
-	int		incremented;
 
 	i = 0;
-	incremented = 0;
 	while (line[i])
 	{
 		init_states(&scanner->state);
@@ -92,22 +89,21 @@ void	ft_scan_line(char *line, t_scanner *scanner)
 			scanner->state.s_quoted_word = 1;
 		else if (line[i] == '$')
 			scanner->state.dollar = 1;
-		else if (line[i] == ' ')
+		if (line[i] == ' ')
 		{
 			if (scanner->temp)
 				from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 			new = ft_lstnew(NULL, line[i]);
 			new->flag = SPACE;
 			ft_lstadd_back(&scanner->temp, new);
-			while (line[i] && line[i] == ' ')
+			while (line[i] && line[i] == ' ' && line[i + 1] == ' ')
 				i++;
-			incremented = 1;
-			scanner->state.reading_word = 0;
 			if (scanner->temp)
 				from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 		}
-		i = whats_the_state(line, scanner, i);
-		if (line[i] && incremented == 0)
+		else
+			i = whats_the_state(line, scanner, i);
+		if (line[i])
 			i++;
 	}
 	if (scanner->temp)
@@ -130,6 +126,7 @@ int	main(void)
 	{
 		result = get_next_line(0, &line);
 		ft_scan_line(line, &scanner);
+		ft_lstclear(&scanner.words);
 		printf("[%s]\n", line);
 	}
 	if (result == -1)
