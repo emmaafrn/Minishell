@@ -29,10 +29,12 @@ typedef struct s_list
 
 typedef struct s_state
 {
-	int	reading_word;
-	int	s_quoted_word;
-	int	d_quoted_word;
-	int	dollar;
+	int		reading_word;
+	int		s_quoted_word;
+	int		d_quoted_word;
+	int		dollar;
+	int		pipe;
+	char	redir;
 }				t_state;
 
 typedef struct s_scanner
@@ -47,13 +49,20 @@ t_list			*ft_lstnew(char *str, char c);
 void			ft_lstadd_back(t_list **alst, t_list *new);
 void			ft_lstclear(t_list **lst);
 int				ft_lstsize(t_list *lst);
+t_list			*ft_lstlast(t_list *lst);
 
 char			*from_lst_to_str(t_list *a);
 void			from_lst_a_to_lst_b(t_list **a, t_list **b);
+void			print_lst(t_list *lst);
 
+void			init_states(t_state *state);
+int				s_quoted_word(char *line, t_list **lst, int i);
+int				d_quoted_word(char *line, t_list **lst, t_list **wrds_lst, int i);
+void			ft_scan_line(char *line, t_scanner *scanner);
+int				whats_the_state(char *line, t_scanner *scanner, int i);
 int				there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst);
 
-void			print_lst(t_list *lst);
+int				whats_the_list(t_list *words_lst);
 
 
 
