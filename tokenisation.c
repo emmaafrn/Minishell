@@ -53,6 +53,7 @@ int	there_is_space(char *line, int i, t_scanner *scanner)
 {
 	t_list	*new;
 
+	printf("line[%d] = %c\n", i, line[i]);
 	if (scanner->temp)
 		from_lst_a_to_lst_b(&scanner->temp, &scanner->words);
 	new = ft_lstnew(NULL, line[i]);

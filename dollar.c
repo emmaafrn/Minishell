@@ -32,6 +32,7 @@ int	there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst)
 		ft_lstadd_back(lst, new);
 		i++;
 	}
+	
 	from_lst_a_to_lst_b(lst, wrds_lst);
 	return (i);
 }

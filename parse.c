@@ -6,11 +6,21 @@ t_list	*remove_a_list_item(t_list **lst, t_list *item)
 	t_list	*removed;
 	
 	first = *lst;
-	while (*lst && (*lst)->next != item)
+	if (*lst == item)
+	{
+		first = (*lst)->next;
+		free(*lst);
+		*lst = NULL;
+		*lst = first;
+		return (*lst);
+	}
+	while ((*lst)->next && (*lst)->next != item)
 		*lst = (*lst)->next;
-	removed = item;
-	(*lst)->next = (*lst)->next->next;
-	free (removed);
+	removed = (*lst)->next;
+	(*lst)->next = removed->next;
+	free(removed);
+	removed = NULL;
+	*lst = first;
 	return (*lst);
 }
 
@@ -28,6 +38,11 @@ int	whats_the_list(t_list *words_lst)
 			if (env_var == NULL)
 			{
 				words_lst = remove_a_list_item(&start, words_lst);
+				printf("-----parse----\n");
+				if (words_lst)
+					print_lst(words_lst);
+				else
+					return (-1);
 				return (0);
 			}
 			words_lst->content.word = env_var;
