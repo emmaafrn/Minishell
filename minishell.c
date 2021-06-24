@@ -51,17 +51,15 @@ int	main(void)
 	char		*line;
 	int			result;
 	t_scanner	scanner;
-	int			parse;
 
 	result = 1;
 	while (result == 1)
 	{
 		result = get_next_line(0, &line);
 		ft_scan_line(line, &scanner);
-		parse = whats_the_list(scanner.words);
-		if (parse != -1)
+		if (scanner.words)
 			ft_lstclear(&scanner.words);
-		if (parse != -1)
+		if (scanner.words)
 			print_lst(scanner.words);
 		printf("line = [%s]\n", line);
 	}

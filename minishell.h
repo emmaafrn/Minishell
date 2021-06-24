@@ -61,8 +61,8 @@ int				d_quoted_word(char *line, t_list **lst, t_list **wrds_lst, int i);
 void			ft_scan_line(char *line, t_scanner *scanner);
 int				whats_the_state(char *line, t_scanner *scanner, int i);
 int				there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst);
+int				get_env_var_value(t_list *item, t_list *start);
 
-int				whats_the_list(t_list *words_lst);
 
 
 

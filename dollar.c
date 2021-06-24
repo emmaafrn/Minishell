@@ -13,6 +13,7 @@ int	there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst)
 {
 	t_list	*new;
 	int		start;
+	t_list	*item;
 
 	start = i;
 	if (*lst)
@@ -32,7 +33,11 @@ int	there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst)
 		ft_lstadd_back(lst, new);
 		i++;
 	}
-	
 	from_lst_a_to_lst_b(lst, wrds_lst);
+	if (i != start)
+	{
+		item = ft_lstlast(*wrds_lst);
+		get_env_var_value(item, *wrds_lst);
+	}
 	return (i);
 }
