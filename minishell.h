@@ -39,11 +39,16 @@ typedef struct s_state
 
 typedef struct s_scanner
 {
-	const char	*cursor;
 	t_state		state;
 	t_list		*temp;
 	t_list		*words;
 }				t_scanner;
+
+typedef struct s_parse
+{
+	t_list		*exec;
+	t_list		*redir;
+}				t_parse;
 
 t_list			*ft_lstnew(char *str, char c);
 void			ft_lstadd_back(t_list **alst, t_list *new);

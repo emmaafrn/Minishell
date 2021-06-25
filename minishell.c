@@ -51,6 +51,7 @@ int	main(void)
 	char		*line;
 	int			result;
 	t_scanner	scanner;
+	t_parse		parse;
 
 	result = 1;
 	while (result == 1)
