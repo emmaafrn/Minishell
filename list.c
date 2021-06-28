@@ -21,6 +21,21 @@ t_list	*ft_lstnew(char *str, char c)
 	return (list);
 }
 
+t_list	*ft_lst_struct_new(void)
+{
+	t_list	*liste;
+
+	liste = malloc(sizeof(t_list));
+	if (!(liste))
+		return (NULL);
+	// liste->lst_struct = malloc(sizeof(t_parse));
+	// if (liste->lst_struct == NULL)
+	// 	return (NULL);
+	liste->content.c = '0';
+	liste->next = NULL;
+	return (liste);
+}
+
 t_list	*ft_lstlast(t_list *lst)
 {
 	if (lst == NULL)
@@ -34,7 +49,7 @@ void	ft_lstadd_back(t_list **alst, t_list *new)
 {
 	t_list		*tmp;
 
-	if (*alst == NULL)
+	if (!*alst)
 		*alst = new;
 	else
 	{

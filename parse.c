@@ -1,41 +1,46 @@
 #include "minishell.h"
 
-void	get_redirections_list(t_scanner *scanner, t_parse *parse)
+void	get_redirections_list(t_tokens *tokens, t_list *parse)
 {
 	t_list	*new;
 
-	while (scanner->words && (char)scanner->words->content.word != '|')
+	while (tokens->words && (char)tokens->words->content.word != '|')
 	{
-		new = ft_lstnew(scanner->words->content.word, '0');
-		ft_lstadd_back(&parse->redir, new);
-		scanner->words = scanner->words->next; 
+		new = ft_lstnew(tokens->words->content.word, '0');
+		ft_lstadd_back(&parse->lst_struct->redir, new);
+		tokens->words = tokens->words->next; 
 	}
 }
 
-
-void	get_exec_list(t_scanner *scanner, t_parse *parse)
+void	get_exec_list(t_tokens *tokens, t_list *parse)
 {
 	t_list	*new;
 
-	while (scanner->words)
+	// printf("AAAAAA\n");
+	// print_lst(tokens->words);
+	while (tokens->words)
 	{
-		while (scanner->words && (char)scanner->words->content.word != '|')
+		new = ft_lst_struct_new();
+		ft_lstadd_back(&parse, new);
+		printf("BBBBBBBB\n");
+		while (tokens->words && (char)tokens->words->content.word != '|')
 		{
-			if (scanner->words->flag == NONE || scanner->words->flag == DOLLAR)
+			if (tokens->words->flag == NONE || tokens->words->flag == DOLLAR)
 			{
-				new = ft_lstnew(scanner->words->content.word, '0');
-				ft_lstadd_back(&parse->exec, new);
+				new = ft_lstnew(tokens->words->content.word, '0');
+				ft_lstadd_back(&parse->lst_struct->exec, new);
+				printf("OLLLLEEEEEEE\n");
 			}
-			if (scanner->words->flag == SPECIAL)
+			if (tokens->words->flag == SPECIAL)
 			{
-				if ((char)scanner->words->content.word == '>'
-					|| (char)scanner->words->content.word == '<')
-					get_redirections_list(scanner, parse);
+				if ((char)tokens->words->content.word == '>'
+					|| (char)tokens->words->content.word == '<')
+					get_redirections_list(tokens, parse);
 			}
-			if (scanner->words)
-				scanner->words = scanner->words->next;
+			if (tokens->words)
+				tokens->words = tokens->words->next;
 		}
-		if (scanner->words)
-			scanner->words = scanner->words->next;
+		if (tokens->words)
+			tokens->words = tokens->words->next;
 	}
 }

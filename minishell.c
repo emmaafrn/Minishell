@@ -50,18 +50,19 @@ int	main(void)
 {
 	char		*line;
 	int			result;
-	t_scanner	scanner;
-	// t_parse		parse;
+	t_tokens	tokens;
+	t_list		parse;
 
 	result = 1;
 	while (result == 1)
 	{
 		result = get_next_line(0, &line);
-		ft_scan_line(line, &scanner);
-		if (scanner.words)
-			ft_lstclear(&scanner.words);
-		if (scanner.words)
-			print_lst(scanner.words);
+		ft_scan_line(line, &tokens);
+		get_exec_list(&tokens, &parse);
+		// if (tokens.words)
+		// 	print_lst(tokens.words);
+		if (tokens.words)
+			ft_lstclear(&tokens.words);
 		printf("line = [%s]\n", line);
 	}
 	if (result == -1)
