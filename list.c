@@ -28,8 +28,8 @@ t_list	*ft_lst_struct_new(void)
 	liste = malloc(sizeof(t_list));
 	if (!(liste))
 		return (NULL);
-	// liste->lst_struct = malloc(sizeof(t_parse));
-	// if (liste->lst_struct == NULL)
+	// liste->lst_struct = malloc(sizeof(t_parse*));
+	// if (!liste->lst_struct)
 	// 	return (NULL);
 	liste->content.c = '0';
 	liste->next = NULL;

@@ -64,6 +64,7 @@ t_list			*ft_lst_struct_new(void);
 char			*from_lst_to_str(t_list *a);
 void			from_lst_a_to_lst_b(t_list **a, t_list **b);
 void			print_lst(t_list *lst);
+void			print_lst_after_parse(t_list *lst);
 
 void			init_states(t_state *state);
 int				s_quoted_word(char *line, t_list **lst, int i);

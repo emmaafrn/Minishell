@@ -16,20 +16,21 @@ void	get_exec_list(t_tokens *tokens, t_list *parse)
 {
 	t_list	*new;
 
-	// printf("AAAAAA\n");
-	// print_lst(tokens->words);
 	while (tokens->words)
 	{
 		new = ft_lst_struct_new();
 		ft_lstadd_back(&parse, new);
-		printf("BBBBBBBB\n");
+		parse->lst_struct = malloc(sizeof(t_parse));
+		parse->lst_struct->exec = NULL;
+		parse->lst_struct->redir = NULL;
+		if (!parse->lst_struct)
+			return ;
 		while (tokens->words && (char)tokens->words->content.word != '|')
 		{
 			if (tokens->words->flag == NONE || tokens->words->flag == DOLLAR)
 			{
 				new = ft_lstnew(tokens->words->content.word, '0');
 				ft_lstadd_back(&parse->lst_struct->exec, new);
-				printf("OLLLLEEEEEEE\n");
 			}
 			if (tokens->words->flag == SPECIAL)
 			{
@@ -43,4 +44,8 @@ void	get_exec_list(t_tokens *tokens, t_list *parse)
 		if (tokens->words)
 			tokens->words = tokens->words->next;
 	}
+	printf("-----exec-----\n");
+	print_lst_after_parse(parse->lst_struct->exec);
+	printf("-----redir-----\n");
+	print_lst_after_parse(parse->lst_struct->redir);
 }

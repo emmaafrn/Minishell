@@ -49,3 +49,18 @@ void	print_lst(t_list *lst)
 		newlst = newlst->next;
 	}
 }
+
+void	print_lst_after_parse(t_list *lst)
+{
+	t_list	*newlst;
+
+	newlst = lst;
+	while (newlst && newlst->content.word)
+	{
+		printf("[%s]\n", newlst->content.word);
+		// printf("flag = %i\n", newlst->flag);
+		newlst = newlst->next;
+	}
+}
+
+
