@@ -51,8 +51,9 @@ int	main(void)
 	char		*line;
 	int			result;
 	t_tokens	tokens;
-	t_list		parse;
+	t_list		*parse;
 
+	parse = NULL;
 	result = 1;
 	while (result == 1)
 	{

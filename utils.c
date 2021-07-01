@@ -52,15 +52,30 @@ void	print_lst(t_list *lst)
 
 void	print_lst_after_parse(t_list *lst)
 {
-	t_list	*newlst;
+	t_list	*new;
 
-	newlst = lst;
-	while (newlst && newlst->content.word)
+	new = lst;
+	printf("------exec------\n");
+	while (new)
 	{
-		printf("[%s]\n", newlst->content.word);
-		// printf("flag = %i\n", newlst->flag);
-		newlst = newlst->next;
+		printf("------\n");
+		while (new->lst_struct->exec)
+		{
+			printf("[%s]\n", new->lst_struct->exec->content.word);
+			new->lst_struct->exec = new->lst_struct->exec->next;
+		}
+		new = new->next;
+	}
+	new = lst;
+	printf("------redir------\n");
+	while (new)
+	{
+		printf("------\n");
+		while (new->lst_struct->redir)
+		{
+			printf("[%s]\n", new->lst_struct->redir->content.word);
+			new->lst_struct->redir = new->lst_struct->redir->next;
+		}
+		new = new->next;
 	}
 }
-
-

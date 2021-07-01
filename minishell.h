@@ -36,7 +36,6 @@ typedef struct s_parse
 	t_list		*redir;
 }				t_parse;
 
-
 typedef struct s_state
 {
 	int		reading_word;
@@ -74,8 +73,8 @@ int				whats_the_state(char *line, t_tokens *tokens, int i);
 int				there_is_env_var(char *line, int i, t_list **lst, t_list **wrds_lst);
 int				get_env_var_value(t_list *item, t_list *start);
 
-void			get_redirections_list(t_tokens *tokens, t_list *parse);
-void			get_exec_list(t_tokens *tokens, t_list *parse);
+void			get_redirections_list(t_tokens *tokens, t_list **parse);
+void			get_exec_list(t_tokens *tokens, t_list **parse);
 
 
 #endif
