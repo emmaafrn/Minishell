@@ -32,16 +32,20 @@ void	get_exec_list(t_tokens *tokens, t_list **parse)
 		{
 			if (tokens->words->flag == NONE || tokens->words->flag == DOLLAR)
 			{
-				new = ft_lstnew(tokens->words->content.word, '0');
-				ft_lstadd_back(&parse_2->lst_struct->exec, new);
+				if (check_fd_redir(tokens->words->content.word) && tokens->words->next->flag == SPECIAL)
+					get_redirections_list(tokens, &parse_2);
+				else
+				{
+					new = ft_lstnew(tokens->words->content.word, '0');
+					ft_lstadd_back(&parse_2->lst_struct->exec, new);
+				}
 			}
-			if (tokens->words->flag == SPECIAL)
+			else if (tokens->words->flag == SPECIAL)
 			{
 				if (tokens->words->content.word[0] == '>'
 					|| tokens->words->content.word[0] == '<')
 					get_redirections_list(tokens, &parse_2);
 			}
-			
 			if (tokens->words && tokens->words->content.word[0] != '|')
 				tokens->words = tokens->words->next;
 		}

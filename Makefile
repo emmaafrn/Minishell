@@ -1,6 +1,6 @@
 NAME	=	minishell
 
-SRCS	=	get_next_line.c list.c minishell.c utils.c dollar.c tokenisation.c env_var_value.c parse.c
+SRCS	=	get_next_line.c list.c minishell.c utils.c dollar.c tokenisation.c env_var_value.c parse.c redirections.c
 
 OBJ = ${SRCS:.c=.o}
 

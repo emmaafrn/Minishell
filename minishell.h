@@ -8,6 +8,7 @@
 # include <stdarg.h>
 # include <stdio.h>
 # include <sys/types.h>
+# include <limits.h>
 
 # define NONE 0
 # define SPACE 1
@@ -60,6 +61,7 @@ int				ft_lstsize(t_list *lst);
 t_list			*ft_lstlast(t_list *lst);
 t_list			*ft_lst_struct_new(void);
 
+
 char			*from_lst_to_str(t_list *a);
 void			from_lst_a_to_lst_b(t_list **a, t_list **b);
 void			print_lst(t_list *lst);
@@ -75,6 +77,7 @@ int				get_env_var_value(t_list *item, t_list *start);
 
 void			get_redirections_list(t_tokens *tokens, t_list **parse);
 void			get_exec_list(t_tokens *tokens, t_list **parse);
+int				check_fd_redir(char *word);
 
 
 #endif
