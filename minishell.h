@@ -54,13 +54,20 @@ typedef struct s_tokens
 	t_list		*words;
 }				t_tokens;
 
+typedef struct s_exec
+{
+
+}				t_exec;
+
 t_list			*ft_lstnew(char *str, char c);
 void			ft_lstadd_back(t_list **alst, t_list *new);
 void			ft_lstclear(t_list **lst);
 int				ft_lstsize(t_list *lst);
 t_list			*ft_lstlast(t_list *lst);
 t_list			*ft_lst_struct_new(void);
-
+int				ft_strcmp(char *s1, char *s2);
+char			*ft_strdup(const char *s);
+char			*ft_free(char **tab, size_t i);
 
 char			*from_lst_to_str(t_list *a);
 void			from_lst_a_to_lst_b(t_list **a, t_list **b);
@@ -78,6 +85,8 @@ int				get_env_var_value(t_list *item, t_list *start);
 void			get_redirections_list(t_tokens *tokens, t_list **parse);
 void			get_exec_list(t_tokens *tokens, t_list **parse);
 int				check_fd_redir(char *word);
+
+void			free_parse_things(t_list *parse);
 
 
 #endif

@@ -64,6 +64,9 @@ int	main(void)
 		// 	print_lst(tokens.words);
 		if (tokens.words)
 			ft_lstclear(&tokens.words);
+		if (parse)
+			free_parse_things(parse);
+		parse = NULL;
 		printf("line = [%s]\n", line);
 	}
 	if (result == -1)
