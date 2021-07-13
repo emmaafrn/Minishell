@@ -3,13 +3,18 @@
 void	get_redirections_list(t_tokens *tokens, t_list **parse)
 {
 	t_list	*new;
+	int		i;
 
-	while (tokens->words && tokens->words->content.word[0] != '|')
+	i = 1;
+	while (tokens->words && i > 0 && tokens->words->content.word[0] != '|')
 	{
 		new = ft_lstnew(tokens->words->content.word, '0');
 		ft_lstadd_back(&(*parse)->lst_struct->redir, new);
-		tokens->words = tokens->words->next; 
+		if (tokens->words->flag != SPECIAL && tokens->words->flag != SPACE)
+			i--;
+		tokens->words = tokens->words->next;
 	}
+	
 }
 
 void	get_exec_list(t_tokens *tokens, t_list **parse)

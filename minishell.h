@@ -67,6 +67,7 @@ t_list			*ft_lstlast(t_list *lst);
 t_list			*ft_lst_struct_new(void);
 int				ft_strcmp(char *s1, char *s2);
 char			*ft_strdup(const char *s);
+
 char			*ft_free(char **tab, size_t i);
 
 char			*from_lst_to_str(t_list *a);
@@ -87,6 +88,8 @@ void			get_exec_list(t_tokens *tokens, t_list **parse);
 int				check_fd_redir(char *word);
 
 void			free_parse_things(t_list *parse);
+
+int				is_it_a_builtin(t_list *parse);
 
 
 #endif

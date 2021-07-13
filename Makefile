@@ -1,6 +1,6 @@
 NAME	=	minishell
 
-SRCS	=	get_next_line.c list.c minishell.c utils.c dollar.c tokenisation.c env_var_value.c parse.c redirections.c free.c
+SRCS	=	get_next_line.c list.c minishell.c utils.c dollar.c tokenisation.c env_var_value.c parse.c redirections.c free.c check_function_name.c libft.c
 
 OBJ = ${SRCS:.c=.o}
 

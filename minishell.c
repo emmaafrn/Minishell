@@ -52,20 +52,24 @@ int	main(void)
 	int			result;
 	t_tokens	tokens;
 	t_list		*parse;
+	int			builtin;
 
 	parse = NULL;
 	result = 1;
+	builtin = 0;
 	while (result == 1)
 	{
 		result = get_next_line(0, &line);
 		ft_scan_line(line, &tokens);
 		get_exec_list(&tokens, &parse);
-		// if (tokens.words)
-		// 	print_lst(tokens.words);
 		if (tokens.words)
 			ft_lstclear(&tokens.words);
 		if (parse)
+		{
+			builtin = is_it_a_builtin(parse);
+			printf("builtin = %d\n", builtin);
 			free_parse_things(parse);
+		}
 		parse = NULL;
 		printf("line = [%s]\n", line);
 	}
