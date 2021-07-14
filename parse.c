@@ -14,7 +14,12 @@ void	get_redirections_list(t_tokens *tokens, t_list **parse)
 			i--;
 		tokens->words = tokens->words->next;
 	}
-	
+	if (tokens->words && (tokens->words->flag == SPECIAL
+			|| tokens->words->flag == SPACE))
+	{
+		new = ft_lstnew(tokens->words->content.word, '0');
+		ft_lstadd_back(&(*parse)->lst_struct->redir, new);
+	}
 }
 
 void	get_exec_list(t_tokens *tokens, t_list **parse)
@@ -37,7 +42,8 @@ void	get_exec_list(t_tokens *tokens, t_list **parse)
 		{
 			if (tokens->words->flag == NONE || tokens->words->flag == DOLLAR)
 			{
-				if (check_fd_redir(tokens->words->content.word) && tokens->words->next->flag == SPECIAL)
+				if (check_fd_redir(tokens->words->content.word)
+						&& tokens->words->next->flag == SPECIAL)
 					get_redirections_list(tokens, &parse_2);
 				else
 				{

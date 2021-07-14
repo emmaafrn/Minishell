@@ -49,3 +49,16 @@ char	*ft_free(char **tab, size_t i)
 	free(tab);
 	return (NULL);
 }
+
+int	ft_lstsize(t_list *lst)
+{
+	int	i;
+
+	i = 0;
+	while (lst != NULL)
+	{
+		lst = lst->next;
+		i++;
+	}
+	return (i);
+}

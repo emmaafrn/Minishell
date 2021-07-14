@@ -89,9 +89,9 @@ void	ft_scan_line(char *line, t_tokens *tokens)
 	}
 	if (tokens->temp)
 		from_lst_a_to_lst_b(&tokens->temp, &tokens->words);
-	if (tokens->words)
-	{
-		printf("-----------------\n");
-		print_lst(tokens->words);
-	}
+	// if (tokens->words)
+	// {
+	// 	printf("-----------------\n");
+	// 	print_lst(tokens->words);
+	// }
 }
