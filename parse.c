@@ -6,16 +6,28 @@ void	get_redirections_list(t_tokens *tokens, t_list **parse)
 	int		i;
 
 	i = 1;
+	new = NULL;
 	while (tokens->words && i > 0 && tokens->words->content.word[0] != '|')
 	{
-		new = ft_lstnew(tokens->words->content.word, '0');
-		ft_lstadd_back(&(*parse)->lst_struct->redir, new);
+		if (tokens->words->flag == SPECIAL && tokens->words->next
+			&& !ft_strcmp(tokens->words->content.word,
+					tokens->words->next->content.word))
+		{
+			new = ft_lstnew(ft_strjoin(tokens->words->content.word,
+					tokens->words->next->content.word), '0');
+			tokens->words = tokens->words->next;
+			ft_lstadd_back(&(*parse)->lst_struct->redir, new);
+		}
+		else if (tokens->words->flag != SPACE)
+		{
+			new = ft_lstnew(tokens->words->content.word, '0');
+			ft_lstadd_back(&(*parse)->lst_struct->redir, new);
+		}
 		if (tokens->words->flag != SPECIAL && tokens->words->flag != SPACE)
 			i--;
 		tokens->words = tokens->words->next;
 	}
-	if (tokens->words && (tokens->words->flag == SPECIAL
-			|| tokens->words->flag == SPACE))
+	if (tokens->words && tokens->words->flag == SPECIAL)
 	{
 		new = ft_lstnew(tokens->words->content.word, '0');
 		ft_lstadd_back(&(*parse)->lst_struct->redir, new);

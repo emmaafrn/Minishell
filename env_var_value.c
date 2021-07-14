@@ -12,6 +12,8 @@ t_list	*remove_a_list_item(t_list **lst, t_list *item)
 		free(*lst);
 		*lst = NULL;
 		*lst = first;
+		if (*lst == NULL)			//réglé à la zeub, faut mieux faire
+			exit(0);
 		return (*lst);
 	}
 	while ((*lst)->next && (*lst)->next != item)

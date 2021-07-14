@@ -67,6 +67,7 @@ t_list			*ft_lstlast(t_list *lst);
 t_list			*ft_lst_struct_new(void);
 int				ft_strcmp(char *s1, char *s2);
 char			*ft_strdup(const char *s);
+char			*ft_strjoin(char const *s1, char const *s2);
 
 char			*ft_free(char **tab, size_t i);
 
