@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efarin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/26 14:27:17 by efarin            #+#    #+#             */
+/*   Updated: 2021/08/26 14:27:19 by efarin           ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 size_t	ft_strlen(const char *s)
@@ -5,7 +17,7 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i])
+	while (s && s[i])
 		i++;
 	return (i);
 }
@@ -19,7 +31,7 @@ char	*ft_strdup(const char *s)
 	dup = malloc((ft_strlen(s) + 1));
 	if (dup == NULL)
 		return (0);
-	while (s[i])
+	while (s && s[i])
 	{
 		dup[i] = s[i];
 		i++;
@@ -33,6 +45,8 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
+	if (!s1 || !s2)
+		return (0);
 	while (s1[i] != '\0' && s2[i] != '\0')
 	{
 		if (s1[i] != s2[i])
@@ -40,14 +54,6 @@ int	ft_strcmp(char *s1, char *s2)
 		i++;
 	}
 	return (s1[i] - s2[i]);
-}
-
-char	*ft_free(char **tab, size_t i)
-{
-	while (i-- > 0)
-		free(tab[i]);
-	free(tab);
-	return (NULL);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -60,7 +66,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	j = 0;
 	if (s1 == 0 || s2 == 0)
 		return (NULL);
-	if (!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!str)
 		return (NULL);
 	while (s1[i])
 	{
